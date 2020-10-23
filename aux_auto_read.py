@@ -1,11 +1,11 @@
 import warnings
 import re
 import pandas
-def auto_read(path,sheet_name):
+def aux_auto_read(path,sheet_name):
 
     global df,df_o
     yunit_dict={"FBG":"Glucose (mM)","GTT":"Glucose (mM)","Weight":"Weight (g)","TG":"TG (mM)","TC":"TC (mM)",
-               "HDL":"HDL (mM)","LDL":"LDL (mM)"}
+               "HDL":"HDL (mM)","LDL":"LDL (mM)","ITT":"Glucose (mM)"}
     try:
         y_unit=yunit_dict[sheet_name]
     except:
@@ -15,6 +15,8 @@ def auto_read(path,sheet_name):
     df_o=pd.read_excel(path,sheet_name=sheet_name,skiprows=1)
         #delete ID==0 & '删除'
     df_o=df_o.query("ID!=0 & ID!='删除'")
+        #delete ID with "***"
+    df_o=df_o[~df_o.ID.str.contains("***")]
         #delete rows with some NAN
     n_row,n_col=df_o.shape
     df_o.dropna(axis=0,how="any",thresh=n_col*0.9,inplace=True)
@@ -37,7 +39,7 @@ def auto_read(path,sheet_name):
     df=df.melt(id_vars=["ID",grouby_key],var_name="x",value_name="y")
     #strip x
     sheet_name=sheet_name.split("_")[0]
-    if sheet_name=="GTT":
+    if sheet_name=="GTT" or sheet_name=="ITT":
         df["x"]=df["x"].map(lambda x:x.strip("分钟"))
         x_unit="Time (min)"
     elif sheet_name in yunit_dict.keys():
