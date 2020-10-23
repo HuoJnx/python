@@ -17,7 +17,6 @@ def aux_auto_read(path,sheet_name):
     df_o=df_o.query("ID!=0 & ID!='删除'")
         #delete ID with "***"
     df_o.ID=df_o.ID.astype("string")
-    print(df_o.ID.str.contains("\*\*\*"))
     df_o=df_o[~df_o.ID.str.contains("\*\*\*")]
         #delete rows with some NAN
     n_row,n_col=df_o.shape
