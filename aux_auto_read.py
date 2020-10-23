@@ -1,6 +1,6 @@
 import warnings
 import re
-import pandas
+import pandas as pd
 def aux_auto_read(path,sheet_name):
 
     global df,df_o
@@ -16,7 +16,9 @@ def aux_auto_read(path,sheet_name):
         #delete ID==0 & '删除'
     df_o=df_o.query("ID!=0 & ID!='删除'")
         #delete ID with "***"
-    df_o=df_o[~df_o.ID.str.contains("***")]
+    df_o.ID=df_o.ID.astype("string")
+    print(df_o.ID.str.contains("\*\*\*"))
+    df_o=df_o[~df_o.ID.str.contains("\*\*\*")]
         #delete rows with some NAN
     n_row,n_col=df_o.shape
     df_o.dropna(axis=0,how="any",thresh=n_col*0.9,inplace=True)
