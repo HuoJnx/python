@@ -13,7 +13,7 @@ def header_for_R(x):
     p=Pinyin()
     Pin_x=p.get_pinyin(x)
 
-    #strip all not belongs to 0-9, a-z, and _
+    #strip all not belongs to 0-9, a-z, A-Z,and _
     Pin_x=re.sub("[^A-Za-z0-9_]","_",Pin_x)
 
     #num at first, add 'zzz' in front of the num
